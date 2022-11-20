@@ -99,7 +99,7 @@ main {
 
 @media only screen and (max-width: 375px) {
   .job-listings {
-    width: 90%;
+    width: 95%;
   }
 }
 </style>

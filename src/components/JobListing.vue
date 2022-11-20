@@ -78,7 +78,9 @@ export default {
 .listing-container {
   padding: 20px 35px;
   background: var(--item-bg-dark-100);
+  position: relative;
 
+  display: flex;
   border-radius: 10px;
   height: fit-content;
   border-left: solid 0px;
@@ -136,7 +138,57 @@ h1 {
   color: var(--text-light-300);
 }
 .filters {
+  width: 50%;
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media only screen and (max-width: 1100px) {
+  .listing-container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    margin: 15px 0 0 0;
+  }
+
+  img {
+    position: absolute;
+    height: 55px;
+    width: 55px;
+    top: 0;
+    left: 20px;
+    transform: translate(0, -50%);
+    border-radius: 50%;
+  }
+
+  h1 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-light-200);
+  }
+
+  .company-details {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .company-details h2 {
+    font-size: 18px;
+    color: var(--color-accent-100);
+    font-weight: 700;
+  }
+  .listing-details {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .filters {
+    width: 100%;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
 }
 </style>

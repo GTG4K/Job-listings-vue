@@ -1,9 +1,9 @@
 <template>
   <the-header></the-header>
   <main>
-    <div class="active-filters" v-if="$store.getters.getFilter.length > 0">
+    <div class="active-filters" v-if="activeFilters.length > 0">
       <base-tag
-        v-for="filter in $store.getters.getFilter"
+        v-for="filter in activeFilters"
         :key="filter"
         :value="filter"
         theme="dark"
@@ -13,7 +13,7 @@
       ></base-tag>
     </div>
     <div class="job-listings">
-      <job-listing v-for="job in $store.getters.getListings" :key="job.id" :job="job"></job-listing>
+      <job-listing v-for="job in listings" :key="job.id" :job="job"></job-listing>
     </div>
   </main>
 </template>
@@ -25,6 +25,14 @@ export default {
   components: {
     TheHeader,
     JobListing,
+  },
+  computed: {
+    listings() {
+      return this.$store.getters.getListings;
+    },
+    activeFilters() {
+      return this.$store.getters.getFilter;
+    },
   },
   methods: {
     removeFilter(filter) {
@@ -87,5 +95,11 @@ main {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+@media only screen and (max-width: 375px) {
+  .job-listings {
+    width: 90%;
+  }
 }
 </style>

@@ -1,12 +1,14 @@
 <template>
-  <div v-if="filterPassed" class="listing-container">
+  <div class="listing-container">
     <div class="details">
       <img :src="getImgUrl()" alt="" />
       <div class="details-container">
         <div class="company-details">
           <h2>{{ job.company }}</h2>
           <base-tag v-if="job.new" theme="vue" type="round">NEW!</base-tag>
-          <base-tag v-if="job.featured" theme="dark" type="round">FEATURED</base-tag>
+          <base-tag v-if="job.featured" theme="dark" type="round"
+            >FEATURED</base-tag
+          >
         </div>
         <h1>{{ job.position }}</h1>
         <div class="listing-details">
@@ -33,43 +35,27 @@
 
 <script>
 export default {
-  props: ["job"],
+  emits: ['addFilter'],
+  props: ['job'],
   data() {
     return {
-      filterPassed: false,
       filters: [],
     };
   },
-  watch: {
-    watchFilter() {
-      console.log(this.$store.getters.getFilter);
-    },
-  },
   methods: {
     getImgUrl() {
-      return require("@/assets/" + this.job.logo + ".png");
+      return require('@/assets/' + this.job.logo + '.png');
     },
-    addFilter(filter) {
-      this.$store.dispatch("addFilter", { value: filter });
+    addFilter(recievedFilter) {
+      this.$emit('addFilter', recievedFilter);
     },
   },
   created() {
     this.filters.push(this.job.role);
     this.filters.push(this.job.level);
+    this.filters.push(this.job.location);
     this.filters.push(...this.job.languages);
     this.filters.push(...this.job.tools);
-
-    const activeFilters = this.$store.getters.getFilter;
-
-    if (activeFilters.length === 0) {
-      this.filterPassed = true;
-    } else {
-      for (let i = 0; i < this.filters.length; i++) {
-        if (activeFilters.find((filter) => filter === this.filters[i])) {
-          this.filterPassed = true;
-        }
-      }
-    }
   },
 };
 </script>

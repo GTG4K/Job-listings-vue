@@ -13,44 +13,89 @@
       ></base-tag>
     </div>
     <div class="job-listings">
-      <job-listing v-for="job in listings" :key="job.id" :job="job"></job-listing>
+      <job-listing
+        v-for="job in listings"
+        :key="job.id"
+        :job="job"
+        @addFilter="addFilter"
+      ></job-listing>
     </div>
   </main>
 </template>
 
 <script>
-import JobListing from "./components/JobListing.vue";
-import TheHeader from "./components/TheHeader.vue";
+import JobListing from './components/JobListing.vue';
+import TheHeader from './components/TheHeader.vue';
 export default {
   components: {
     TheHeader,
     JobListing,
   },
+  data() {
+    return {
+      activeFilters: [],
+    };
+  },
   computed: {
     listings() {
-      return this.$store.getters.getListings;
-    },
-    activeFilters() {
-      return this.$store.getters.getFilter;
+      const listings = this.$store.getters.getListings;
+
+      if (this.activeFilters.length === 0) {
+        return listings;
+      } else {
+        const filteredListing = [];
+        let filterBy = [];
+        let allFiltersPassed;
+        for (let i = 0; i < listings.length; i++) {
+          filterBy = [
+            listings[i].role,
+            listings[i].level,
+            listings[i].location,
+            ...listings[i].languages,
+            ...listings[i].tools,
+          ];
+          allFiltersPassed = true;
+          for (let j = 0; j < this.activeFilters.length; j++) {
+            if (!filterBy.includes(this.activeFilters[j])) {
+              allFiltersPassed = false;
+            }
+          }
+          if (allFiltersPassed) {
+            filteredListing.push(listings[i]);
+          }
+        }
+        return filteredListing;
+      }
     },
   },
   methods: {
-    removeFilter(filter) {
-      this.$store.dispatch("removeFilter", { value: filter });
+    removeFilter(recievedFilter) {
+      const filterIndex = this.activeFilters.findIndex(
+        (filter) => filter === recievedFilter
+      );
+      this.activeFilters.splice(filterIndex, 1);
+    },
+    addFilter(recievedFilter) {
+      console.lo;
+      if (!this.activeFilters.find((filter) => filter === recievedFilter)) {
+        this.activeFilters.push(recievedFilter);
+      } else {
+        console.log(`${recievedFilter} is already being filtered`);
+      }
     },
   },
 };
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;700&display=swap');
 
 :root {
   --background-dark: #1a1a1a;
   --item-bg-dark-100: #242424;
   --item-bg-dark-200: #3d3d3d;
   --item-bg-dark-300: #272727;
-  --font-100: "Nunito", sans-serif;
+  --font-100: 'Nunito', sans-serif;
 
   --color-divider: rgba(84, 84, 84, 0.5);
 
